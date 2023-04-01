@@ -11,9 +11,112 @@ namespace IntegralCounter
     public static class MathParser
     {
 
-        private static readonly List<string> functions = new List<string>() { "sin", "cos", "tg", "ctg", "ln", "sqrt" };
-        private static readonly List<string> operators = new List<string>() { "+", "-", "*", "/", "^" };
+        private static readonly List<string> functions = new List<string>()
+        {   "sin",
+            "cos",
+            "tg",
+            "ctg",
 
+            "ln",
+            "log",
+            "log2",
+           @"log[\d]",
+
+            "sqrt",
+            "cbrt",
+
+            "arcsin",
+            "arccos",
+            "arctg",
+            "arcctg",
+
+            "sinh",
+            "cosh",
+            "tanh",
+            "ctgh",
+
+            "abs",
+            "exp",
+
+            "sec",
+            "csc",
+
+        };
+        private static readonly List<string> operators = new List<string>() { "+", "-", "*", "/", "^" };
+        private static decimal ApplyFunction(decimal value, string function)
+        {
+            try
+            {
+                switch (function)
+                {
+                    case "sin":
+                        return (decimal)Math.Sin((double)value);
+                    case "cos":
+                        return (decimal)Math.Cos((double)value);
+                    case "tg":
+                        return (decimal)Math.Tan((double)value);
+                    case "ctg":
+                        return 1 / (decimal)Math.Tan((double)value);
+
+                    case "ln":
+                        return (decimal)Math.Log((double)value);
+                    case "log":
+                        return (decimal)Math.Log10((double)value);
+                    case "log2":
+                        return (decimal)Math.Log2((double)value);
+
+                    case "sqrt":
+                        return (decimal)Math.Sqrt((double)value);
+                    case "cbrt":
+                        return (decimal)Math.Cbrt((double)value);
+                    case @"log[\d]":
+                        string pattern = @"\[(.*?)\]";
+                        Match match = Regex.Match(function, pattern);
+                        if (match.Success)
+                        {
+                            double result = Convert.ToDouble(match.Groups[1].Value);
+                            return (decimal)(Math.Log((double)value) / Math.Log(result));
+                        }
+                        throw new PolishNotationException(function + "Тут ошибка где-то");
+
+                    case "abs":
+                        return (decimal)Math.Abs((double)value);
+                    case "exp":
+                        return (decimal)Math.Pow(Math.E, (double)value);
+
+                    case "arcsin":
+                        return (decimal)Math.Asin((double)value);
+                    case "arccos":
+                        return (decimal)Math.Acos((double)value);
+                    case "arctg":
+                        return (decimal)Math.Atan((double)value);
+                    case "arcctg":
+                        return (decimal)Math.PI / 2 - (decimal)Math.Atan((double)value);
+
+                    case "sinh":
+                        return (decimal)Math.Sinh((double)value);
+                    case "cosh":
+                        return (decimal)Math.Cosh((double)value);
+                    case "tgh":
+                        return (decimal)Math.Tanh((double)value);
+                    case "ctgh":
+                        return (decimal)(1/Math.Tanh((double)value));
+
+                    case "sec":
+                        return (decimal)(1/Math.Cos((double)value));
+                    case "csc":
+                        return (decimal)(1 / Math.Sin((double)value));
+
+
+                    default:
+                        throw new PolishNotationException("Invalid operator: " + value);
+                }
+            }
+            catch
+            {
+                throw new OutOfScopeException();
+            }
+        }
 
         private static bool isNumber(string token) => double.TryParse(token, NumberStyles.Any, CultureInfo.InvariantCulture, out double result);
         private static bool isFunction(string token) => functions.Contains(token);
@@ -53,7 +156,7 @@ namespace IntegralCounter
         }
         private static IEnumerable<string> Tokenization(string input)
         {
-            string pattern = $@"(\d+([.,]\d+)?)|([a-zA-Z]{{1,4}})|(({string.Join("|", functions)})(?=\())|([\+\-\*/\(\)^])";
+            string pattern = $@"(\d+([.,]\d+)?)|(({string.Join("|", functions)})(?=\())|([\+\-\*/\(\)^])|([a-zA-Z]{{1,4}})";
 
             MatchCollection matches = Regex.Matches(input, pattern);
 
@@ -118,7 +221,7 @@ namespace IntegralCounter
 
                     stack.Pop();
 
-                    if (isFunction(stack.Peek()))
+                    if (stack.Count > 0 && isFunction(stack.Peek()))
                     {
                         outputQueue.Enqueue(stack.Pop());
                     }
@@ -163,33 +266,6 @@ namespace IntegralCounter
                 throw new OutOfScopeException();
             }
            
-        }
-        private static decimal ApplyFunction(decimal value, string function)
-        {
-            try
-            {
-                switch (function)
-                {
-                    case "sin":
-                        return (decimal)Math.Sin((double)value);
-                    case "cos":
-                        return (decimal)Math.Cos((double)value);
-                    case "tg":
-                        return (decimal)Math.Tan((double)value);
-                    case "ctg":
-                        return 1 / (decimal)Math.Tan((double)value);
-                    case "ln":
-                        return (decimal)Math.Log((double)value);
-                    case "sqrt":
-                        return (decimal)Math.Sqrt((double)value);
-                    default:
-                        throw new PolishNotationException("Invalid operator: " + value);
-                }
-            }
-            catch
-            {
-                throw new OutOfScopeException();
-            }
         }
 
         //Всё Ради Этого 

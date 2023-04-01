@@ -9,21 +9,21 @@ namespace IntegralCounter
         public Form1()
         {
             InitializeComponent();
-            sch = new Schedule(pictureBox3);
-            functionBox.Text = "x ln";
+            sch = new Schedule(pictureBox3.Width, pictureBox3.Height);
+            pictureBox3.Image = sch.Bitmap;
+            functionBox.Text = "x/2 + cos(x)";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            //Обработка Интеграла
             ParseLimits();
             I = new Integral(lowLimit, upLimit, functionBox.Text);
             ValueBox.Text = I.Value.ToString();
-            sch.DrawFunction(functionBox.Text);
 
-
+            //Обработка Графика 
+            sch.ChangeFunction(functionBox.Text);
             pictureBox3.Image = sch.Bitmap;
-
         }
 
         private void ParseLimits()
@@ -65,20 +65,26 @@ namespace IntegralCounter
             }
         }
 
-        private void pictureBox3_Resize(object sender, EventArgs e)
+        //private void pictureBox3_Resize(object sender, EventArgs e)
+        //{
+        //    if (sch != null)
+        //    {
+        //        sch.Graphics = pictureBox3.CreateGraphics();
+        //        pictureBox3.Image = sch.Bitmap;
+        //    }
+        //}
+        private void pictureBox3_SizeChanged(object sender, EventArgs e)
         {
-            if (sch != null)
-            {
-                sch.Graphics = pictureBox3.CreateGraphics();
-                sch.Reload();
-                pictureBox3.Image = sch.Bitmap;
-
-            }
+            sch = new Schedule(pictureBox3.Width,pictureBox3.Height);
+            sch.ChangeFunction(functionBox.Text);
+            pictureBox3.Image = sch.Bitmap;
         }
 
         private void pictureBox3_MouseMove(object sender, MouseEventArgs e)
         {
             coord.Text = $"{e.X} ; {e.Y}";
         }
+
+
     }
 }

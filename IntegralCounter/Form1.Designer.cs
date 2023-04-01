@@ -113,13 +113,15 @@
             // 
             pictureBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox3.BackColor = SystemColors.ControlLight;
+            pictureBox3.BorderStyle = BorderStyle.FixedSingle;
             pictureBox3.Location = new Point(252, 12);
             pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(452, 464);
+            pictureBox3.Size = new Size(771, 479);
             pictureBox3.TabIndex = 0;
             pictureBox3.TabStop = false;
+            pictureBox3.SizeChanged += pictureBox3_SizeChanged;
             pictureBox3.MouseMove += pictureBox3_MouseMove;
-            pictureBox3.Resize += pictureBox3_Resize;
+            //pictureBox3.Resize += pictureBox3_Resize;
             // 
             // button1
             // 
@@ -149,7 +151,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(716, 488);
+            ClientSize = new Size(1035, 503);
             Controls.Add(coord);
             Controls.Add(pictureBox3);
             Controls.Add(ValueBox);
