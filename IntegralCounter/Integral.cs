@@ -9,47 +9,37 @@ namespace IntegralCounter
 {
     public class Integral
     {
-        private double upperLimit;
-        private double lowerLimit;
+        private decimal upperLimit;
+        private decimal lowerLimit;
         private string function;
-        private PointF[] points;
-        private double value;
-        public double Value => value;
-        public PointF[] Points
+        private decimal value;
+        public decimal Value => value;
+        public Integral(decimal upperLimit, decimal lowerLimit, string function)
         {
-            get => points;
-        }
+            if (lowerLimit > upperLimit)
+            {
+                var temp = upperLimit;
+                upperLimit = lowerLimit;
+                lowerLimit = temp;
+            }
 
-        public Integral(int upperLimit, int lowerLimit, string function)
-        {
             this.upperLimit = upperLimit;
             this.lowerLimit = lowerLimit;
-            this.function = function;
-            Integrate(1000000);
-        }
 
+
+            this.function = function;
+            Integrate(10000);
+        }
         private void Integrate(int intervals)
         {
-            double deltaX = (upperLimit - lowerLimit) / intervals;
-            double sum = 0.0;
-
-            List<PointF> points = new List<PointF>();
+            decimal deltaX = (upperLimit - lowerLimit) / intervals;
+            decimal sum = 0;
 
             for (int i = 0; i < intervals; i++)
             {
-                double x = lowerLimit + i * deltaX;
-                double y = MathParser.Evaluate(function, x);
-                sum += y * deltaX;
-
-                if (i % 10000 == 0)
-                {
-                    float floatX = (float)x;
-                    float floatY = (float)y;
-                    points.Add(new PointF(floatX, floatY));
-                }
+                decimal x = lowerLimit + i * deltaX;
+                decimal y = MathParser.Evaluate(function, x);
             }
-
-            this.points = points.ToArray();
             value = sum;
         }
 

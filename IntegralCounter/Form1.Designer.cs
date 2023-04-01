@@ -34,7 +34,7 @@
             pictureBox1 = new PictureBox();
             pictureBox2 = new PictureBox();
             label1 = new Label();
-            function = new TextBox();
+            functionBox = new TextBox();
             diff = new TextBox();
             pictureBox3 = new PictureBox();
             button1 = new Button();
@@ -93,13 +93,13 @@
             label1.TabIndex = 6;
             label1.Text = "d";
             // 
-            // function
+            // functionBox
             // 
-            function.Location = new Point(49, 90);
-            function.Name = "function";
-            function.Size = new Size(127, 31);
-            function.TabIndex = 7;
-            function.Text = "-x^2+6";
+            functionBox.Location = new Point(49, 90);
+            functionBox.Name = "functionBox";
+            functionBox.Size = new Size(127, 31);
+            functionBox.TabIndex = 7;
+            functionBox.Text = "x 2 ^";
             // 
             // diff
             // 
@@ -155,7 +155,7 @@
             Controls.Add(ValueBox);
             Controls.Add(button1);
             Controls.Add(diff);
-            Controls.Add(function);
+            Controls.Add(functionBox);
             Controls.Add(label1);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
@@ -177,7 +177,7 @@
         private PictureBox pictureBox1;
         private PictureBox pictureBox2;
         private Label label1;
-        private TextBox function;
+        private TextBox functionBox;
         private TextBox diff;
         private Button button1;
         private TextBox ValueBox;
