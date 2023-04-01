@@ -14,20 +14,7 @@ namespace IntegralCounter
         private static readonly List<string> functions = new List<string>() { "sin", "cos", "tg", "ctg", "ln", "sqrt" };
         private static readonly List<string> operators = new List<string>() { "+", "-", "*", "/", "^" };
 
-        //private static string GetPattern() //Тестовая История. Слишком замудрено получается. Я решил отказаться от этой идеи.
-        //{
-        //    string pattern = @"(\d+([.,]\d+)?)|([a-zA-Z]{1,4})|((ln|tg|sin|cos|ctg)(?=\())|([\+\-\*/\(\)^])";
 
-        //    // добавляем функции в паттерн
-        //    string functionsPattern = string.Join("|", functions.Select(f => f.ToLower() + @"(?=\()"));
-        //    pattern = pattern.Replace("(ln|tg|sin|cos|ctg)(?=", "(") + "|" + functionsPattern + ")";
-
-        //    // добавляем операторы в паттерн
-        //    string operatorsPattern = string.Join("|", operators.Select(o => "\\" + o));
-        //    pattern = pattern.Replace("[\\+\\-\\*/\\(\\)^]", "[" + operatorsPattern + "]");
-
-        //    return pattern;
-        //}
         private static bool isNumber(string token) => double.TryParse(token, NumberStyles.Any, CultureInfo.InvariantCulture, out double result);
         private static bool isFunction(string token) => functions.Contains(token);
         private static bool isOperator(string token) => operators.Contains(token);
@@ -77,6 +64,7 @@ namespace IntegralCounter
         }
         private static string[] TransformInfixToPostfixNotation(string infixString)
         {
+
             var stack = new Stack<string>();
             var outputQueue = new Queue<string>();
 
@@ -97,7 +85,7 @@ namespace IntegralCounter
                     while (stack.Peek() != "(")
                     {
                         outputQueue.Enqueue(stack.Pop());
-                        if (stack.Count == 0) throw new Exception("Стек закончился до того, как был встречен токен открывающая скобка - в выражении пропущен разделитель аргументов функции (запятая), либо пропущена открывающая скобка.");
+                        if (stack.Count == 0) throw new PolishNotationException("Стек закончился до того, как был встречен токен открывающая скобка - в выражении пропущен разделитель аргументов функции (запятая), либо пропущена открывающая скобка.");
                     }
 
                 }
@@ -125,7 +113,7 @@ namespace IntegralCounter
                     while (stack.Count > 0 && stack.Peek() != "(")
                     {
                         outputQueue.Enqueue(stack.Pop());
-                        if (stack.Count == 0) throw new Exception("стек закончился до того, как был встречен токен открывающая скобка. В выражении пропущена скобка");
+                        if (stack.Count == 0) throw new PolishNotationException("стек закончился до того, как был встречен токен открывающая скобка. В выражении пропущена скобка");
                     }
 
                     stack.Pop();
@@ -140,7 +128,7 @@ namespace IntegralCounter
 
             while (stack.Count > 0)
             {
-                if (stack.Peek() == "(") throw new Exception("Токен оператор на вершине стека — открывающая скобка, в выражении пропущена скобка");
+                if (stack.Peek() == "(") throw new PolishNotationException("Токен оператор на вершине стека — открывающая скобка, в выражении пропущена скобка");
                 outputQueue.Enqueue(stack.Pop());
             }
 
@@ -151,40 +139,56 @@ namespace IntegralCounter
         //Служебные Функции Evaluate
         private static decimal ApplyOperator(decimal left, decimal right, string @operator)
         {
-            switch (@operator)
+            try
             {
-                case "+":
-                    return left + right;
-                case "-":
-                    return left - right;
-                case "*":
-                    return left * right;
-                case "/":
-                    return left / right;
-                case "^":
-                    return (decimal)Math.Pow((double)left, (double)right);
-                default:
-                    throw new ArgumentException("Invalid operator: " + @operator);
+                switch (@operator)
+                {
+                    case "+":
+                        return left + right;
+                    case "-":
+                        return left - right;
+                    case "*":
+                        return left * right;
+                    case "/":
+                        return left / right;
+                    case "^":
+                        return (decimal)Math.Pow((double)left, (double)right);
+
+                    default:
+                        throw new PolishNotationException("Invalid operator: " + @operator);
+                }
             }
+            catch
+            {
+                throw new OutOfScopeException();
+            }
+           
         }
         private static decimal ApplyFunction(decimal value, string function)
         {
-            switch (function)
+            try
             {
-                case "sin":
-                    return (decimal)Math.Sin((double)value);
-                case "cos":
-                    return (decimal)Math.Cos((double)value);
-                case "tg":
-                    return (decimal)Math.Tan((double)value);
-                case "ctg":
-                    return 1/(decimal)Math.Tan((double)value);
-                case "ln":
-                    return (decimal)Math.Log((double)value);
-                case "sqrt":
-                    return (decimal)Math.Sqrt((double)value);
-                default:
-                    throw new ArgumentException("Invalid operator: " + value);
+                switch (function)
+                {
+                    case "sin":
+                        return (decimal)Math.Sin((double)value);
+                    case "cos":
+                        return (decimal)Math.Cos((double)value);
+                    case "tg":
+                        return (decimal)Math.Tan((double)value);
+                    case "ctg":
+                        return 1 / (decimal)Math.Tan((double)value);
+                    case "ln":
+                        return (decimal)Math.Log((double)value);
+                    case "sqrt":
+                        return (decimal)Math.Sqrt((double)value);
+                    default:
+                        throw new PolishNotationException("Invalid operator: " + value);
+                }
+            }
+            catch
+            {
+                throw new OutOfScopeException();
             }
         }
 
@@ -231,5 +235,16 @@ namespace IntegralCounter
             return stack.Pop();
         }
 
+    }
+
+    public class PolishNotationException : Exception
+    {
+        public PolishNotationException() : base() { }
+        public PolishNotationException(string message) : base(message) { }
+    }
+    public class OutOfScopeException : Exception
+    {
+        public OutOfScopeException() : base() { }
+        public OutOfScopeException(string message) : base(message) { }
     }
 }

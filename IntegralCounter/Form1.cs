@@ -4,8 +4,8 @@ namespace IntegralCounter
     {
         private Integral I;
         private Schedule sch;
-        private double lowLimit;
-        private double upLimit;
+        private decimal lowLimit;
+        private decimal upLimit;
         public Form1()
         {
             InitializeComponent();
@@ -28,22 +28,24 @@ namespace IntegralCounter
 
         private void ParseLimits()
         {
-            double LowerLimitValue, UpperLimitValue;
+            decimal LowerLimitValue, UpperLimitValue;
 
-            if (double.TryParse(lowerLimit.Text, out double LLimit))
+            if (decimal.TryParse(lowerLimit.Text, out decimal LLimit))
             {
                 LowerLimitValue = LLimit;
             }
+
             else
             {
                 LowerLimitValue = 0;
                 lowerLimit.Text = "0";
             }
 
-            if (double.TryParse(upperLimit.Text, out double ULimit))
+            if (decimal.TryParse(upperLimit.Text, out decimal ULimit))
             {
                 UpperLimitValue = ULimit;
             }
+
             else
             {
                 UpperLimitValue = 1;
@@ -55,6 +57,7 @@ namespace IntegralCounter
                 lowLimit = UpperLimitValue;
                 upLimit = LowerLimitValue;
             }
+
             else
             {
                 lowLimit = LowerLimitValue;

@@ -38,7 +38,15 @@ namespace IntegralCounter
             for (int i = 0; i < intervals; i++)
             {
                 decimal x = lowerLimit + i * deltaX;
-                decimal y = MathParser.Evaluate(function, x);
+                try
+                {
+                    decimal y = MathParser.Evaluate(function, x);
+                    sum += y * deltaX;
+                }
+                catch(OutOfScopeException)
+                {
+                    sum += 0;
+                }
             }
             value = sum;
         }
