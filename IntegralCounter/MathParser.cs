@@ -10,6 +10,7 @@ namespace IntegralCounter
 {
     public static class MathParser
     {
+        private static readonly List<string> operators = new List<string>() { "+", "-", "*", "/", "^" };
 
         private static readonly List<string> functions = new List<string>()
         {   "sin",
@@ -42,7 +43,6 @@ namespace IntegralCounter
             "csc",
 
         };
-        private static readonly List<string> operators = new List<string>() { "+", "-", "*", "/", "^" };
         private static decimal ApplyFunction(decimal value, string function)
         {
             try
@@ -226,6 +226,14 @@ namespace IntegralCounter
                         outputQueue.Enqueue(stack.Pop());
                     }
                 }
+                if (token == "pi" || token == "PI" || token == "p" || token == "P")
+                {
+                    outputQueue.Enqueue("3.14159265359");
+                }
+                if (token == "e" || token == "E")
+                {
+                    outputQueue.Enqueue("2,71828182844");
+                }
                 prevToken = token;
             }
 
@@ -255,6 +263,11 @@ namespace IntegralCounter
                     case "/":
                         return left / right;
                     case "^":
+                        if(left == right && left <= 0)
+                        {
+                            throw new OutOfScopeException();
+                        }
+
                         return (decimal)Math.Pow((double)left, (double)right);
 
                     default:

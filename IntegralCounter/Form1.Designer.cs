@@ -39,7 +39,9 @@
             pictureBox3 = new PictureBox();
             button1 = new Button();
             ValueBox = new TextBox();
-            coord = new TextBox();
+            CoordinatesX = new Label();
+            CoordinatesY = new Label();
+            semicolon = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -120,8 +122,10 @@
             pictureBox3.TabIndex = 0;
             pictureBox3.TabStop = false;
             pictureBox3.SizeChanged += pictureBox3_SizeChanged;
+            pictureBox3.Paint += pictureBox3_Paint;
+            pictureBox3.MouseEnter += pictureBox3_MouseEnter;
+            pictureBox3.MouseLeave += pictureBox3_MouseLeave;
             pictureBox3.MouseMove += pictureBox3_MouseMove;
-            //pictureBox3.Resize += pictureBox3_Resize;
             // 
             // button1
             // 
@@ -140,19 +144,47 @@
             ValueBox.Size = new Size(127, 31);
             ValueBox.TabIndex = 11;
             // 
-            // coord
+            // CoordinatesX
             // 
-            coord.Location = new Point(49, 298);
-            coord.Name = "coord";
-            coord.Size = new Size(127, 31);
-            coord.TabIndex = 12;
+            CoordinatesX.Anchor = AnchorStyles.Bottom;
+            CoordinatesX.AutoSize = true;
+            CoordinatesX.Location = new Point(580, 456);
+            CoordinatesX.Name = "CoordinatesX";
+            CoordinatesX.Size = new Size(59, 25);
+            CoordinatesX.TabIndex = 12;
+            CoordinatesX.Text = "label2";
+            CoordinatesX.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // CoordinatesY
+            // 
+            CoordinatesY.Anchor = AnchorStyles.Bottom;
+            CoordinatesY.AutoSize = true;
+            CoordinatesY.Location = new Point(645, 456);
+            CoordinatesY.Name = "CoordinatesY";
+            CoordinatesY.Size = new Size(59, 25);
+            CoordinatesY.TabIndex = 13;
+            CoordinatesY.Text = "label2";
+            CoordinatesY.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // semicolon
+            // 
+            semicolon.Anchor = AnchorStyles.Bottom;
+            semicolon.AutoSize = true;
+            semicolon.Location = new Point(634, 456);
+            semicolon.Name = "semicolon";
+            semicolon.RightToLeft = RightToLeft.No;
+            semicolon.Size = new Size(16, 25);
+            semicolon.TabIndex = 14;
+            semicolon.Text = ";\r\n";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1035, 503);
-            Controls.Add(coord);
+            Controls.Add(semicolon);
+            Controls.Add(CoordinatesY);
+            Controls.Add(CoordinatesX);
             Controls.Add(pictureBox3);
             Controls.Add(ValueBox);
             Controls.Add(button1);
@@ -184,6 +216,8 @@
         private Button button1;
         private TextBox ValueBox;
         private PictureBox pictureBox3;
-        private TextBox coord;
+        private Label CoordinatesX;
+        private Label CoordinatesY;
+        private Label semicolon;
     }
 }
