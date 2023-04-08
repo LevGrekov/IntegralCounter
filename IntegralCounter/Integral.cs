@@ -16,14 +16,7 @@ namespace IntegralCounter
         private Function differential;
         public decimal Value
         {
-            get
-            {
-                if (differential == null)
-                {
-                    return Simpson();
-                }
-                else return 1;
-            }
+            get => Simpson();
         }
         public decimal UpperLimit => upperLimit;
         public decimal LowerLimit => lowerLimit;
