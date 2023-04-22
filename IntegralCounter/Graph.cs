@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing;
 using System.Windows.Forms;
 
-internal class Schedule
+internal class Graph
 {
 
     //private string function = "0";
@@ -79,7 +79,7 @@ internal class Schedule
 
     }
 
-    public Schedule(int Width, int Height)
+    public Graph(int Width, int Height)
     {
         blackPen = new Pen(Color.Black, 0.1f);
         redPen = new Pen(Color.Red, 2f);

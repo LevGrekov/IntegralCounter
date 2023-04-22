@@ -7,11 +7,11 @@ namespace IntegralCounter
     public partial class Form1 : Form
     {
         private Integral I;
-        private Schedule sch;
+        private Graph sch;
         public Form1()
         {
             InitializeComponent();
-            sch = new Schedule(pictureBox3.Width, pictureBox3.Height);
+            sch = new Graph(pictureBox3.Width, pictureBox3.Height);
             pictureBox3.Image = sch.Bitmap;
             functionBox.Text = "sin(x)+3*x";
             upperLimit.Text = "1";
